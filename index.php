@@ -1,5 +1,50 @@
 <?php
+class User
+{
+    public $id;
+    public $firstName;
+    public $lastName;
+    public $birthDate;
 
+    public function __construct(int $id, string $firstName, string $lastName, DateTime $birthDate)
+    {
+        $this->id = $id;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->birthDate = $birthDate;
+    }
+}
+
+class Review
+{
+    public $user;
+    public $product;
+    public $text;
+    private $rating;
+
+    public function __construct(User $user, Product $product, int $rating)
+    {
+        $this->user = $user;
+        $this->product = $product;
+        $this->set_rating($rating);
+    }
+
+    public function set_rating(int $value)
+    {
+        if ($value <= 10 and $value >= 1) {
+            $this->rating = $value;
+        } else {
+            echo 'Рейтинг должен быть от 1 до 10';
+        }
+    }
+
+    public function get_rating() : int
+    {
+        return $this->rating;
+    }
+
+
+}
 class Product
 {
     public $id;
@@ -66,54 +111,6 @@ class Cart
         $this->user = $user;
     }
 }
-
-class User
-{
-    public $id;
-    public $firstName;
-    public $lastName;
-    public $birthDate;
-
-    public function __construct(int $id, string $firstName, string $lastName, DateTime $birthDate)
-    {
-        $this->id = $id;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->birthDate = $birthDate;
-    }
-}
-
-class Review
-{
-    public $user;
-    public $product;
-    public $text;
-    private $rating;
-
-    public function __construct(User $user, Product $product, int $rating)
-    {
-        $this->user = $user;
-        $this->product = $product;
-        $this->set_rating($rating);
-    }
-
-    public function set_rating(int $value)
-    {
-        if ($value <= 10 and $value >= 1) {
-            $this->rating = $value;
-        } else {
-            echo 'Рейтинг должен быть от 1 до 10';
-        }
-    }
-
-    public function get_rating() : int
-    {
-        return $this->rating;
-    }
-
-
-}
-
 class Purchase
 {
     static function add_in_cart(ProductInStock $product, $amount, Cart $cart)
