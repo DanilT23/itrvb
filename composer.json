@@ -1,0 +1,17 @@
+{
+    "name": "tgu/tolkov",
+    "autoload": {
+        "psr-4": {
+            "Tgu\\Tolkov\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Danil",
+            "email": "daniltolkov@mail.ru"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.23"
+    }
+}
