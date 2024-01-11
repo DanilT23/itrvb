@@ -17,6 +17,7 @@
     "require": {
         "fakerphp/faker": "^1.23",
         "ramsey/uuid": "^4.7",
+        "symfony/http-foundation": "^7.0",
         "ext-pdo": "*"
     },
     "require-dev": {
