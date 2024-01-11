@@ -2,9 +2,9 @@
 
 require_once __DIR__. "/vendor/autoload.php";
 
-use Tgu\Tolkov\User;
-use Tgu\Tolkov\Article;
-use Tgu\Tolkov\Comments;
+use Tgu\Tolkov\Model\Article;
+use Tgu\Tolkov\Model\Comments;
+use Tgu\Tolkov\Model\User;
 
 spl_autoload_register(function ($class) {
     $file = str_replace('\\', DIRECTORY_SEPARATOR, $class) . 'php';
