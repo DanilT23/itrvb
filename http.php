@@ -1,24 +1,30 @@
 <?php
 
-require 'vendor/autoload.php';
-
 use myHttp\Actions\Comments\CreateComment;
+use myHttp\Actions\Likes\CreateCommentLike;
+use myHttp\Actions\Likes\CreatePostLike;
+use myHttp\Actions\Likes\GetByUuidCommentLikes;
+use myHttp\Actions\Likes\GetByUuidPostLikes;
 use myHttp\Actions\Posts\CreatePost;
 use myHttp\Actions\Posts\DeletePost;
+use myHttp\Actions\Users\CreateUser;
 use myHttp\Actions\Users\FindByUsername;
 use myHttp\ErrorResponse;
 use myHttp\Request;
-use Tgu\Tolkov\Repositories\CommentRepository;
-use Tgu\Tolkov\Repositories\PostRepository;
-use Tgu\Tolkov\Repositories\UserRepository;
+use Psr\Log\LoggerInterface;
 
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+$container = require __DIR__ . '/bootstrap.php';
+
+$logger = $container->get(LoggerInterface::class);
+
 try {
     $request = new Request($_GET, $_POST, $_SERVER);
 } catch (Exception $ex) {
+    $logger->warning($ex->getMessage());
     (new ErrorResponse($ex->getMessage()))->send();
     return;
 }
@@ -26,6 +32,7 @@ try {
 try {
     $path = $request->path();
 } catch (Exception $ex) {
+    $logger->warning($ex->getMessage());
     (new ErrorResponse($ex->getMessage()))->send();
     return;
 }
@@ -33,51 +40,47 @@ try {
 try {
     $method = $request->method();
 } catch (Exception $ex) {
+    $logger->warning($ex->getMessage());
     (new ErrorResponse($ex->getMessage()))->send();
     return;
 }
 
 $routs = [
     'GET' => [
-        '/users/show' => new FindByUsername(
-            new UserRepository(
-                new PDO('sqlite:'.__DIR__.'/db/blog.sqlite')
-            )
-        )
+        '/users/show' => FindByUsername::class,
+        '/likes/comment' => GetByUuidCommentLikes::class,
+        '/likes/post' => GetByUuidPostLikes::class,
     ],
     'POST' => [
-        '/posts/comment' => new CreateComment(
-            new CommentRepository(
-                new PDO('sqlite:'.__DIR__.'/db/blog.sqlite')
-            )
-        ),
-        '/posts/create' => new CreatePost(
-            new PostRepository(
-                new PDO('sqlite:'.__DIR__.'/db/blog.sqlite')
-            )
-        )
+        '/posts/comment' => CreateComment::class,
+        '/posts/' => CreatePost::class,
+        '/likes/post/' => CreatePostLike::class,
+        '/likes/comment/' => CreateCommentLike::class,
+        '/user/' => CreateUser::class
     ],
     'DELETE' => [
-        '/posts' => new DeletePost(
-            new PostRepository(
-                new PDO('sqlite:'.__DIR__.'/db/log.sqlite')
-            )
-        )
+        '/posts' => DeletePost::class
     ]
 ];
 
-if (!array_key_exists($method, $routs) || !array_key_exists($path, $routs[$method])) {
-    (new ErrorResponse('Not found path'))->send();
-    return;
-}
-
-$action = $routs[$method][$path];
+$response = new ErrorResponse('An unknown error occurred.');
 
 try {
-    $response = $action->handle($request);
+    $path = $request->path();
+    $method = $request->method();
+
+    if (!array_key_exists($method, $routs) || !array_key_exists($path, $routs[$method])) {
+        $message = "Route not found: $method $path";
+        $logger->notice($message);
+        $response = new ErrorResponse($message);
+    } else {
+        $actionClassName = $routs[$method][$path];
+        $action = $container->get($actionClassName);
+        $response = $action->handle($request);
+    }
 } catch (Exception $ex) {
-    (new ErrorResponse($ex->getMessage()))->send();
-    return;
+    $logger->error($ex->getMessage(), ['exception' => $ex]);
+    $response = new ErrorResponse($ex->getMessage());
 }
 
 $response->send();

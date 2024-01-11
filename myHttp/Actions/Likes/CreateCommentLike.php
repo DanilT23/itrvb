@@ -10,11 +10,12 @@ use myHttp\SuccessfullResponse;
 use Tgu\Tolkov\Model\CommentLike;
 use Tgu\Tolkov\Model\UUID;
 use Tgu\Tolkov\Repositories\CommentLikeRepository;
+use Tgu\Tolkov\Repositories\CommentLikeRepositoryInterface;
 
 class CreateCommentLike implements ActionInterface
 {
     public function __construct(
-      private CommentLikeRepository $commentLikeRepository
+      private CommentLikeRepositoryInterface $commentLikeRepository
     ) { }
 
     public function handle(Request $request): Response

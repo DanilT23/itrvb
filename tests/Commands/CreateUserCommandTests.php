@@ -11,6 +11,7 @@ use Tgu\Tolkov\Model\Name;
 use Tgu\Tolkov\Model\User;
 use Tgu\Tolkov\Model\UUID;
 use Tgu\Tolkov\Repositories\UserRepositoryInterface;
+use tests\DummyLogger;
 
 class CreateUserCommandTests extends TestCase
 {
@@ -20,7 +21,7 @@ class CreateUserCommandTests extends TestCase
     protected function setUp(): void
     {
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
-        $this->createUserCommand = new CreateUserCommand($this->userRepository);
+        $this->createUserCommand = new CreateUserCommand($this->userRepository, new DummyLogger());
     }
 
     public function testHandleCreatesUserWhenNotExists(): void

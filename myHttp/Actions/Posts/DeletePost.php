@@ -10,11 +10,12 @@ use myHttp\SuccessfullResponse;
 use Tgu\Tolkov\Exceptions\HttpException;
 use Tgu\Tolkov\Exceptions\PostNotFoundException;
 use Tgu\Tolkov\Repositories\PostRepository;
+use Tgu\Tolkov\Repositories\PostsRepositoryInterface;
 
 class DeletePost implements ActionInterface
 {
     public function __construct(
-        private PostRepository $postRepository
+        private PostsRepositoryInterface $postRepository
     ) { }
 
     public function handle(Request $request): Response

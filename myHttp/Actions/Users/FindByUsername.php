@@ -3,17 +3,18 @@ namespace myHttp\Actions\Users;
 
 use myHttp\Actions\ActionInterface;
 use myHttp\ErrorResponse;
-use myHttp\SuccessfullResponse;
 use myHttp\Request;
 use myHttp\Response;
+use myHttp\SuccessfullResponse;
 use Tgu\Tolkov\Exceptions\HttpException;
 use Tgu\Tolkov\Exceptions\UserNotFoundException;
 use Tgu\Tolkov\Repositories\UserRepository;
+use Tgu\Tolkov\Repositories\UserRepositoryInterface;
 
 class FindByUsername implements ActionInterface
 {
     public function __construct(
-        private UserRepository $userRepository
+        private UserRepositoryInterface $userRepository,
     ) {}
 
     public function handle(Request $request): Response

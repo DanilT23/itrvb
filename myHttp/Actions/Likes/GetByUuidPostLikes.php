@@ -12,11 +12,12 @@ use Tgu\Tolkov\Exceptions\PostLikeNotFoundException;
 use Tgu\Tolkov\Model\PostLike;
 use Tgu\Tolkov\Model\UUID;
 use Tgu\Tolkov\Repositories\PostLikeRepository;
+use Tgu\Tolkov\Repositories\PostLikeRepositoryInterface;
 
 class GetByUuidPostLikes implements ActionInterface
 {
     public function __construct(
-        private PostLikeRepository $postLikeRepository
+        private PostLikeRepositoryInterface $postLikeRepository
     )
     {
 

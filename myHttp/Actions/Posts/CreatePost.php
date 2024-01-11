@@ -11,11 +11,12 @@ use Tgu\Tolkov\Exceptions\InvalidArgumentException;
 use Tgu\Tolkov\Model\Post;
 use Tgu\Tolkov\Model\UUID;
 use Tgu\Tolkov\Repositories\PostRepository;
+use Tgu\Tolkov\Repositories\PostsRepositoryInterface;
 
 class CreatePost implements ActionInterface
 {
     public function __construct(
-        private PostRepository $postRepository
+        private PostsRepositoryInterface $postRepository
     ) { }
     public function handle(Request $request): Response
     {
@@ -32,7 +33,6 @@ class CreatePost implements ActionInterface
 
             $post = new Post($uuid, $authorUuid, $title, $text);
             $this->postRepository->save($post);
-
 
             return new SuccessfullResponse(['message' => 'Post created successfully']);
         } catch (\Exception $ex) {

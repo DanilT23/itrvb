@@ -10,12 +10,13 @@ use myHttp\SuccessfullResponse;
 use Tgu\Tolkov\Model\Comment;
 use Tgu\Tolkov\Model\UUID;
 use Tgu\Tolkov\Repositories\CommentRepository;
+use Tgu\Tolkov\Repositories\CommentsRepositoryInterface;
 use Tgu\Tolkov\Repositories\UserRepository;
 
 class CreateComment implements ActionInterface
 {
     public function __construct(
-        private CommentRepository $commentRepository
+        private CommentsRepositoryInterface $commentRepository
     ) { }
     public function handle(Request $request): Response
     {
