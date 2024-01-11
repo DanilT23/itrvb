@@ -1,6 +1,8 @@
 <?php
 
 namespace Tgu\Tolkov\Model;
+
+use Tgu\Tolkov\Model\UUID;
 class Comments
 {
     function __construct(private UUID $uuid, private UUID $author_uuid, private UUID $article_uuid, private string $text)
